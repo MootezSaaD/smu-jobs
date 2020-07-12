@@ -1,12 +1,13 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card';
-import Form from 'react-bootstrap/Form';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import NewJob from './NewJob';
 
 function ListFilters() {
   return (
-    <Card>
-      <Card.Header>Filters</Card.Header>
-      <Card.Body>
+    <div className='row mt-3'>
+      <div className='col'>
+        {' '}
+        <h5>Filters</h5>
         {[
           'CS425',
           'MATH348',
@@ -16,12 +17,29 @@ function ListFilters() {
           'CS350',
           'ISS396',
         ].map((type) => (
-          <div key={type} className='mb-3'>
-            <Form.Check custom type={type} id={type} label={type} />
+          <div className='custom-control custom-checkbox mb-1'>
+            <input type='checkbox' className='custom-control-input' id={type} />
+            <label className='custom-control-label' for={type}>
+              {type}
+            </label>
           </div>
         ))}
-      </Card.Body>
-    </Card>
+      </div>
+      <div className='col'>
+        <Router>
+          <Link to='/new'>
+            <button type='button' className='btn btn-success'>
+              New
+            </button>
+          </Link>
+          <Switch>
+            <Route path='/new'>
+              <NewJob />
+            </Route>
+          </Switch>
+        </Router>
+      </div>
+    </div>
   );
 }
 

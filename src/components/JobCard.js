@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 
 function JobCard(props) {
   return (
-    <Card className='shadow-sm mb-1'>
+    <Card className='shadow-sm mb-2'>
       <Card.Body>
         <Card.Title>{`[${props.course}] ${props.title}`}</Card.Title>
         <Card.Subtitle className='mb-2 text-muted'>

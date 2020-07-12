@@ -44,7 +44,7 @@ export default class JobsList extends Component {
           <FormControl
             type='text'
             placeholder='Search'
-            className='w-100 mb-3'
+            className='w-100 mb-3 mt-3'
           />
         </Form>
         {this.state.jobs.map((job) => (
