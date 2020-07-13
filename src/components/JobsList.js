@@ -1,42 +1,22 @@
 import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
-//
+// Redux
+import JobsStoreContext from '../contexts/jobsStoreContext';
 import JobCard from './JobCard';
 
 export default class JobsList extends Component {
-  state = {
-    jobs: [
-      {
-        title: 'Teaching Assistant',
-        course: 'CS425',
-        author: 'Prof. John Doe',
-        description:
-          "Some quick example text to build on the card title and make up the bulk of the card's content.",
-      },
-      {
-        title: 'Library Team',
-        course: 'Library',
-        author: 'Prof. Jacques Montali',
-        description:
-          "Some quick example text to build on the card title and make up the bulk of the card's content.",
-      },
-      {
-        title: 'Webmaster',
-        course: 'SMU-COMS',
-        author: 'SMU Communication Team',
-        description:
-          "Some quick example text to build on the card title and make up the bulk of the card's content.",
-      },
-      {
-        title: 'Intership at the Applications Office',
-        course: 'SMU',
-        author: 'SMU Administration',
-        description:
-          "Some quick example text to build on the card title and make up the bulk of the card's content.",
-      },
-    ],
-  };
+  static contextType = JobsStoreContext;
+  state = { jobs: [] };
+  componentDidMount() {
+    const store = this.context;
+    this.unsubscribe = store.subscribe(() => {
+      this.state({ job: store.getState() });
+    });
+  }
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
   render() {
     return (
       <>
@@ -48,7 +28,12 @@ export default class JobsList extends Component {
           />
         </Form>
         {this.state.jobs.map((job) => (
-          <JobCard title={job.title} course={job.course} author={job.author}>
+          <JobCard
+            key={job.id}
+            course={job.course}
+            author={job.author}
+            title={job.title}
+          >
             {job.description}
           </JobCard>
         ))}
