@@ -14,7 +14,6 @@ module.exports = (req, res, next) => {
         res.statusCode = 401;
         next(new Error(err.message));
       } else {
-        console.log(decoded);
         req.userId = decoded._id;
         req.role = decoded.role;
         next();

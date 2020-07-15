@@ -6,6 +6,7 @@ const app = express();
 const PORT = 3000 || process.env.PORT;
 const jobsRouter = require('./routes/jobs/index');
 const authRouter = require('./routes/auth/index');
+const applicationsRouter = require('./routes/applications/index');
 const errorHandler = require('./helpers/errorHandler');
 require('dotenv').config();
 
@@ -29,6 +30,7 @@ mongoose.connect(
 // Routes
 app.use('/api/jobs', jobsRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/applications', applicationsRouter);
 
 app.use(errorHandler);
 

@@ -1,15 +1,13 @@
 const Router = require('router');
 const verifyToken = require('../../middleware/verifyToken');
 const { isRecruiter } = require('../../middleware/role');
-const { addJob } = require('../../services/jobs.service');
+const { addJob, selectAllJobs } = require('../../services/jobs.service');
 const route = Router();
 
-route.get('/', verifyToken, isRecruiter, (req, res, next) => {
+route.get('/', verifyToken, isRecruiter, async (req, res, next) => {
   try {
-    console.log(req.userId);
-    res.json({
-      message: 'Hi there !',
-    });
+    const jobs = await selectAllJobs();
+    res.json(jobs);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -23,7 +21,7 @@ route.post('/new', verifyToken, isRecruiter, async (req, res, next) => {
       message: 'Job has been successfully added',
     });
   } catch (error) {
-    throw new Error(error.message);
+    next(error);
   }
 });
 

@@ -1,7 +1,16 @@
 const Job = require('../models/Job');
 
 module.exports = {
-  selectAllJobs: async () => Job.find(),
+  selectAllJobs: async () => {
+    try {
+      return Job.find({ expirationDate: { $gte: new Date() } })
+        .populate('author', 'firstName lastName email -_id')
+        .select('-__v');
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+
   addJob: async (jobDetails, userId) => {
     try {
       jobDetails.author = userId;
