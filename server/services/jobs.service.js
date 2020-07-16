@@ -11,9 +11,9 @@ module.exports = {
     }
   },
 
-  addJob: async (jobDetails, userId) => {
+  addJob: async (jobDetails /* , userId */) => {
     try {
-      jobDetails.author = userId;
+      //jobDetails.author = userId;
       const job = new Job(jobDetails);
       await job
         .save()
@@ -22,6 +22,7 @@ module.exports = {
           // TODO: handle errors correctly
           console.log(err);
         });
+      return job;
     } catch (error) {
       throw new Error(error.message);
     }
