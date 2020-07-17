@@ -10,6 +10,7 @@ route.post('/login', async (req, res, next) => {
       ...user,
     });
   } catch (error) {
+    res.status(401);
     next(error);
   }
 });

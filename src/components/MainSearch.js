@@ -17,7 +17,7 @@ function MainSearch() {
       </div>
       <div className='p-2'>
         <button type='button' className='btn btn-success'>
-          Advanced
+          All
         </button>
       </div>
     </div>

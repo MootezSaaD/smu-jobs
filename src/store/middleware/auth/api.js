@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as actions from '../../api';
 import api, { setToken } from '../../../api/init';
 

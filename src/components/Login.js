@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { login } from '../store/auth/auth';
+import { Redirect } from 'react-router-dom';
+import { getValidToken } from '../api/token';
 
 function Login(props) {
-  console.log(props);
   // Props object destructuring
   return (
     <>
+      {getValidToken() ? <Redirect to='/' /> : null}
       <div className='container-fluid h-100 bg-light text-center'>
         <div className='row h-75 justify-content-center'>
           <div className='col-md-2 mx-auto my-auto shadow-sm'>

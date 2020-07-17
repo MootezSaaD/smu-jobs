@@ -50,7 +50,6 @@ export const selectJobByAuthorID = createSelector(
 
 const {
   jobAdded,
-  jobRemoved,
   jobsReceived,
   jobsRequested,
   jobRequestFailed,
