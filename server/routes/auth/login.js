@@ -6,7 +6,7 @@ route.post('/login', async (req, res, next) => {
   try {
     const user = await login(req.body);
     res.json({
-      sucess: true,
+      success: true,
       ...user,
     });
   } catch (error) {

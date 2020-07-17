@@ -1,62 +1,138 @@
-// Duck Pattern
-import { createAction } from '@reduxjs/toolkit';
+// Ducks Pattern
 
-// Initial State
+// Using redux toolkit to use less boilerplate code
+import { createSlice } from '@reduxjs/toolkit';
+import { createSelector } from 'reselect';
+import { jobsApiCallBegan } from '../api';
 
-const initialState = {
-  entities: {
-    jobs: [
-      {
-        id: 2547,
-        title: 'Teaching Assistant',
-        course: 'CS425',
-        author: 'Prof. John Doe',
-        description:
-          "Some quick example text to build on the card title and make up the bulk of the card's content.",
-      },
-      {
-        id: 8740,
-        title: 'Library Team',
-        course: 'Library',
-        author: 'Prof. Jacques Montali',
-        description:
-          "Some quick example text to build on the card title and make up the bulk of the card's content.",
-      },
-      {
-        id: 9758,
-        title: 'Webmaster',
-        course: 'SMU-COMS',
-        author: 'SMU Communication Team',
-        description:
-          "Some quick example text to build on the card title and make up the bulk of the card's content.",
-      },
-      {
-        id: 1478,
-        title: 'Intership at the Applications Office',
-        course: 'SMU',
-        author: 'SMU Administration',
-        description:
-          "Some quick example text to build on the card title and make up the bulk of the card's content.",
-      },
-    ],
-    auth: {},
-    ui: {},
+const slice = createSlice({
+  name: 'jobs',
+  initialState: {
+    list: [],
+    loading: false,
+    lastFetch: null, // Used for caching
   },
+  reducers: {
+    jobRequestFailed: (jobs, action) => {
+      jobs.loading = false;
+    },
+    jobsRequested: (jobs, action) => {
+      jobs.loading = true;
+    },
+    jobsReceived: (jobs, action) => {
+      jobs.list = action.payload;
+      jobs.loading = false;
+      jobs.lastFetch = Date.now();
+    },
+    // actions => action handlers
+    jobAdded: (jobs, action) => {
+      jobs.list.push(action.payload);
+    },
+    jobRemoved: (jobs, action) => {
+      return jobs.list.filter((job) => job.id !== action.payload.id);
+    },
+  },
+});
+
+// Selector Functions (with memoization using reselect)
+// (state, resulting_function())
+
+export const selectJobByAuthorID = createSelector(
+  (state) => state.entities.jobs,
+  (jobs, authorId) => {
+    const result = [];
+    for (const job in jobs) {
+      if (jobs[job].authorId === authorId) result.push(jobs[job]);
+    }
+    return result;
+  }
+);
+
+const {
+  jobAdded,
+  jobRemoved,
+  jobsReceived,
+  jobsRequested,
+  jobRequestFailed,
+} = slice.actions;
+export default slice.reducer;
+
+// Action creator
+const url = '/jobs';
+
+export const loadJobs = () => (dispatch, getState) => {
+  const { lastFetch } = getState().entities.jobs;
+
+  if (Date.now() - lastFetch < 10 * 60 * 1000) {
+    return;
+  } // Caching (do not fetch if last fetch was less than 10 mintues earlier)
+
+  dispatch(
+    jobsApiCallBegan({
+      url,
+      onStart: jobsRequested.type,
+      onSuccess: jobsReceived.type,
+      onError: jobRequestFailed.type,
+    })
+  );
 };
 
-// Actions types [LEGACY] - Replaced using Redux Toolkit
+export const addJob = (job) =>
+  jobsApiCallBegan({
+    url: `${url}/new`,
+    method: 'post',
+    data: job,
+    onSuccess: jobAdded.type,
+  });
+
+// export const jobAdded = createAction('jobAdded');
+// export const jobRemoved = createAction('jobRemoved'); [LEGACY]
+
+// Action Types
+// [LEGACY]
 // const JOB_ADDED = 'jobAdded';
+// const JOB_REMOVED = 'jobRemoved';
 
 // Action creators
-export const jobAdded = createAction('jobAdded');
+// [LEGACY]
+// export const jobAdded = ({ id, title, author, description, course }) => ({
+//   type: JOB_ADDED,
+//   payload: {
+//     id,
+//     title,
+//     author,
+//     description,
+//     course,
+//   },
+// });
+//
+// export const jobRemoved = (id) => ({
+//   type: JOB_REMOVED,
+//   payload: {
+//     id,
+//   },
+// });
 
-// Reducer
+// Reducers
 
-export default function reducer(state = initialState.entities.jobs, action) {
-  switch (action.type) {
-    case jobAdded.type:
-      return [...state, action.payload];
-    default:
-      return state;
-  }
-}
+// export default createReducer([], {
+//   [jobAdded.type]: (jobs, action) => {
+//     jobs.push({ ...action.payload });
+//   },
+//   [jobRemoved.type]: (jobs, action) => {
+//     return jobs.filter((job) => job.id !== action.payload.id);
+//   },
+// });
+
+// [LEGACY]
+// export default function reducer(state = [], action) {
+//   switch (action.type) {
+//     case jobAdded.type:
+//       return [...state, action.payload];
+//     case jobRemoved.type:
+//       return state.filter((job) => !job.id);
+
+//     default:
+//       return state;
+//   }
+// }

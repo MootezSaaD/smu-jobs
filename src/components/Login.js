@@ -1,12 +1,24 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { login } from '../store/auth/auth';
 
-function Login() {
+function Login(props) {
+  console.log(props);
+  // Props object destructuring
   return (
     <>
       <div className='container-fluid h-100 bg-light text-center'>
         <div className='row h-75 justify-content-center'>
           <div className='col-md-2 mx-auto my-auto shadow-sm'>
-            <form>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                const elements = event.target.elements;
+                const email = elements.email.value;
+                const password = elements.password.value;
+                props.login({ email, password });
+              }}
+            >
               <img
                 className='mb-4 mt-2'
                 src='https://getbootstrap.com/docs/4.5/assets/brand/bootstrap-solid.svg'
@@ -18,6 +30,7 @@ function Login() {
                 <label htmlFor='exampleInputEmail1'>Email address</label>
                 <input
                   type='email'
+                  name='email'
                   className='form-control'
                   id='exampleInputEmail1'
                   aria-describedby='emailHelp'
@@ -27,6 +40,7 @@ function Login() {
                 <label htmlFor='exampleInputPassword1'>Password</label>
                 <input
                   type='password'
+                  name='password'
                   className='form-control'
                   id='exampleInputPassword1'
                 />
@@ -42,7 +56,7 @@ function Login() {
                 </label>
               </div>
               <button type='submit' className='btn btn-primary mb-2'>
-                Submit
+                Login
               </button>
             </form>
           </div>
@@ -52,4 +66,13 @@ function Login() {
   );
 }
 
-export default Login;
+// user : state.entities.user.userInfo
+const mapStateToProps = (state) => ({
+  user: state.entities.auth.userInfo,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  login: (user) => dispatch(login(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
