@@ -3,10 +3,16 @@ import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getValidToken, getUser } from '../api/token';
 import { addJob } from '../store/jobs/jobs';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const user = getUser();
 
 class NewJob extends Component {
+  state = {
+    date: null,
+  };
+
   render() {
     return (
       <>
@@ -44,8 +50,18 @@ class NewJob extends Component {
                         title = elements.title.value,
                         course = elements.course.value,
                         description = elements.description.value;
-                      console.log({ title, course, description });
-                      this.props.postJob({ title, course, description });
+                      console.log({
+                        title,
+                        course,
+                        description,
+                        date: this.state.date.toISOString(),
+                      });
+                      this.props.postJob({
+                        title,
+                        course,
+                        description,
+                        expirationDate: this.state.date.toISOString(),
+                      });
                     }}
                   >
                     <div className='form-group w-25'>
@@ -67,6 +83,16 @@ class NewJob extends Component {
                         name='course'
                         placeholder='Course / Place'
                       />
+                    </div>
+                    <div className='form-group w-25'>
+                      <label htmlFor='job-course'>Expiration Date :</label>
+                      <div>
+                        <DatePicker
+                          dateFormat='yyyy/MM/dd'
+                          selected={this.state.date}
+                          onChange={(date) => this.setState({ date })}
+                        />
+                      </div>
                     </div>
                     <div className='form-group w-50'>
                       <label htmlFor='job-description'>Description :</label>

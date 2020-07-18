@@ -3,7 +3,12 @@ import * as actions from '../../api';
 
 const jobsApi = ({ dispatch }) => (next) => async (action) => {
   // If this is not an api call
-  if (action.type !== actions.addJobApiCallBegan.type) {
+  const API_CALLS = [];
+  Object.keys(actions).forEach((key) => {
+    API_CALLS.push(actions[key].type);
+  });
+  if (!API_CALLS.includes(action.type)) {
+    console.log(API_CALLS);
     return next(action);
   }
 
