@@ -1,6 +1,7 @@
 import decodeToken from 'jwt-decode';
 
 const accessToken = 'accessToken';
+const userItem = 'user';
 
 export function storeToken(token) {
   if (token) {
@@ -32,4 +33,18 @@ export function getToken() {
   } else {
     return null;
   }
+}
+
+export function setUser(user) {
+  if (user) {
+    localStorage.setItem(userItem, user);
+  }
+}
+
+export function getUser() {
+  const user = localStorage.getItem(userItem);
+  if (user) {
+    return JSON.parse(user);
+  }
+  return null;
 }

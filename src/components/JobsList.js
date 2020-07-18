@@ -2,60 +2,75 @@ import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 // Redux
-import JobsStoreContext from '../contexts/jobsStoreContext';
-import * as actions from '../store/jobs/jobs';
+import { connect } from 'react-redux';
+import { loadJobs } from '../store/jobs/jobs';
 //
 import JobCard from './JobCard';
 
-export default class JobsList extends Component {
-  static contextType = JobsStoreContext;
-  state = {
-    jobs: [],
-  };
+class JobsList extends Component {
   componentDidMount() {
-    const store = this.context;
-    this.unsubscribe = store.subscribe(() => {
-      this.setState({ jobs: store.getState() });
-    });
-  }
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-  addJob() {
-    const store = this.context;
-    store.dispatch(
-      actions.jobAdded({
-        id: 55,
-        title: 'Intership at the Applications Office',
-        course: 'SMU',
-        author: 'SMU Administration',
-        description:
-          "Some quick example text to build on the card title and make up the bulk of the card's content.",
-      })
-    );
+    this.props.load();
   }
   render() {
     return (
       <>
-        <Form inline>
-          <FormControl
-            type='text'
-            placeholder='Search'
-            className='w-100 mb-3 mt-3'
-          />
-          <button onClick={this.addJob}>Add</button>
-        </Form>
-        {this.state.jobs.map((job) => (
-          <JobCard
-            key={job.id}
-            course={job.course}
-            author={job.author}
-            title={job.title}
-          >
-            {job.description}
-          </JobCard>
-        ))}
+        <div className='d-flex h-100' id='wrapper'>
+          <div className='bg-light border-right' id='sidebar-wrapper'>
+            <div className='sidebar-heading'>Menu </div>
+            <div className='list-group list-group-flush'>
+              <a
+                href={'/'}
+                className='list-group-item list-group-item-action bg-light'
+              >
+                Home
+              </a>
+              <a
+                href={'/'}
+                className='list-group-item list-group-item-action bg-light'
+              >
+                Post
+              </a>
+            </div>
+          </div>
+          <div className='container-fluid h-100 bg-light'>
+            <div className='row h-100'>
+              <div className='col-md-10'>
+                <Form inline>
+                  <FormControl
+                    type='text'
+                    placeholder='Search'
+                    className='w-100 mb-3 mt-3'
+                  />
+                </Form>
+                {this.props.jobs.map((job) => (
+                  <JobCard
+                    key={job._id}
+                    course={job.course}
+                    author={
+                      !!job.author
+                        ? `${job.author.firstName} ${job.author.lastName}`
+                        : 'SMU STAFF'
+                    }
+                    title={job.title}
+                  >
+                    {job.description}
+                  </JobCard>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </>
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  jobs: state.entities.jobs.list,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  load: () => dispatch(loadJobs()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(JobsList);

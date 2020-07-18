@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getValidToken } from '../api/token';
+import { getValidToken, getUser } from '../api/token';
 
 function NavBar(props) {
+  const user = getUser();
   const notLoggedItem = (
     <>
       <li className='nav-item'>
@@ -20,31 +21,35 @@ function NavBar(props) {
   );
   const loggedItem = (
     <>
-      <li className='nav-item'>
-        <span className='nav-link'>{`Hi, ${props.user.firstName} ${props.user.lastName}!`}</span>
-      </li>
-      {' | '}
-      {'Recruiter' === props.user.role ? (
+      {!!user ? (
         <>
           <li className='nav-item'>
-            <Link to='/new' className='nav-link'>
-              Post Job
-            </Link>
+            <span className='nav-link'>{`Hi, ${user.firstName} ${user.lastName}!`}</span>
           </li>
           {' | '}
-          <li className='nav-item'>
-            <Link to='/' className='nav-link'>
-              Browse
-            </Link>
-          </li>
+          {'Recruiter' === user.role ? (
+            <>
+              <li className='nav-item'>
+                <Link to='/new' className='nav-link'>
+                  Post Job
+                </Link>
+              </li>
+              {' | '}
+              <li className='nav-item'>
+                <Link to='/jobs' className='nav-link'>
+                  Browse
+                </Link>
+              </li>
+            </>
+          ) : (
+            <li className='nav-item'>
+              <Link to='/' className='nav-link'>
+                Browse
+              </Link>
+            </li>
+          )}
         </>
-      ) : (
-        <li className='nav-item'>
-          <Link to='/' className='nav-link'>
-            Browse
-          </Link>
-        </li>
-      )}
+      ) : null}
     </>
   );
 
@@ -56,7 +61,7 @@ function NavBar(props) {
         </Link>
       </span>
       <ul className='navbar-nav ml-auto'>
-        {!!getValidToken() && props.isLoggedIn ? loggedItem : notLoggedItem}
+        {!!getValidToken() ? loggedItem : notLoggedItem}
       </ul>
     </nav>
   );

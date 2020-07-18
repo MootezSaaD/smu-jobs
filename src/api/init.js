@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { storeToken, getToken } from './token';
+import { storeToken, getValidToken } from './token';
 
 const baseURL = 'http://localhost:3001/api/'; // To be moved to .env
 
@@ -16,6 +16,6 @@ export function setToken(token) {
   }
 }
 
-setToken(getToken());
+setToken(getValidToken());
 
 export default api;

@@ -5,6 +5,7 @@ module.exports = (req, res, next) => {
   if (!req.headers.authorization) {
     res.statusCode = 403;
     next(new Error('Missing access Token'));
+    return;
   }
   jwt.verify(
     req.headers.authorization.replace('Bearer ', ''),

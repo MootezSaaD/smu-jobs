@@ -11,6 +11,7 @@ import { getValidToken } from './api/token';
 import Home from './components/Home';
 import Login from './components/Login';
 import NavBar from './components/NavBar';
+import JobsList from './components/JobsList';
 
 // Redux
 import configureStore from './store/configureStore';
@@ -44,6 +45,9 @@ class App extends Component {
             ></Route>
             <Route path='/new'>
               <NewJob />
+            </Route>
+            <Route path='/jobs'>
+              <JobsList />
             </Route>
           </Switch>
         </Router>

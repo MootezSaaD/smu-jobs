@@ -11,9 +11,9 @@ module.exports = {
     }
   },
 
-  addJob: async (jobDetails /* , userId */) => {
+  addJob: async (jobDetails, userId) => {
     try {
-      //jobDetails.author = userId;
+      jobDetails.author = userId;
       const job = new Job(jobDetails);
       await job
         .save()

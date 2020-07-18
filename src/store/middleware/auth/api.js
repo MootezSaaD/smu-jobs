@@ -1,5 +1,6 @@
 import * as actions from '../../api';
 import api, { setToken } from '../../../api/init';
+import { setUser } from '../../../api/token';
 
 const authApi = ({ dispatch }) => (next) => async (action) => {
   // If this is not an api call
@@ -17,6 +18,7 @@ const authApi = ({ dispatch }) => (next) => async (action) => {
   try {
     const response = await api.post('/auth/login', data);
     setToken(response.data.accessToken);
+    setUser(JSON.stringify(response.data));
     dispatch(actions.authApiCallSuccess(response.data));
     if (onSuccess) {
       dispatch({ type: onSuccess, payload: response.data });

@@ -3,7 +3,7 @@
 // Using redux toolkit to use less boilerplate code
 import { createSlice } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
-import { jobsApiCallBegan } from '../api';
+import { jobsApiCallBegan, addJobApiCallBegan } from '../api';
 
 const slice = createSlice({
   name: 'jobs',
@@ -77,7 +77,7 @@ export const loadJobs = () => (dispatch, getState) => {
 };
 
 export const addJob = (job) =>
-  jobsApiCallBegan({
+  addJobApiCallBegan({
     url: `${url}/new`,
     method: 'post',
     data: job,
