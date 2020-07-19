@@ -8,7 +8,6 @@ const jobsApi = ({ dispatch }) => (next) => async (action) => {
     API_CALLS.push(actions[key].type);
   });
   if (!API_CALLS.includes(action.type)) {
-    console.log(API_CALLS);
     return next(action);
   }
 

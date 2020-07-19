@@ -5,7 +5,22 @@ import { Redirect } from 'react-router-dom';
 import { getValidToken } from '../api/token';
 
 function Login(props) {
-  // Props object destructuring
+  const errorMessage = (
+    <div
+      className='alert alert-danger alert-dismissible fade show'
+      role='alert'
+    >
+      Login Failed
+      <button
+        type='button'
+        className='close'
+        data-dismiss='alert'
+        aria-label='Close'
+      >
+        <span aria-hidden='true'>&times;</span>
+      </button>
+    </div>
+  );
   return (
     <>
       {getValidToken() ? <Redirect to='/' /> : null}
@@ -28,6 +43,7 @@ function Login(props) {
                 width='72'
                 height='72'
               />
+              {props.failedLogin ? errorMessage : null}
               <div className='form-group text-left'>
                 <label htmlFor='exampleInputEmail1'>Email address</label>
                 <input
@@ -71,6 +87,8 @@ function Login(props) {
 // user : state.entities.user.userInfo
 const mapStateToProps = (state) => ({
   user: state.entities.auth.userInfo,
+  responseMessage: state.entities.auth.responseMessage,
+  failedLogin: state.entities.auth.failedLogin,
 });
 
 const mapDispatchToProps = (dispatch) => ({

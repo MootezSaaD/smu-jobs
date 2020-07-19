@@ -25,9 +25,9 @@ const authApi = ({ dispatch }) => (next) => async (action) => {
     }
   } catch (error) {
     // General error
-    dispatch(actions.authApiCallSuccess(error.message));
+    dispatch(actions.authApiCallFailed(error.message));
     if (onError) {
-      dispatch({ type: onError });
+      dispatch({ type: onError, payload: error.message });
     }
   }
 };

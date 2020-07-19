@@ -13,6 +13,23 @@ class NewJob extends Component {
     date: null,
   };
 
+  successMessage = (
+    <div
+      className='alert alert-success alert-dismissible fade show'
+      role='alert'
+    >
+      Job has been successfully added!
+      <button
+        type='button'
+        className='close'
+        data-dismiss='alert'
+        aria-label='Close'
+      >
+        <span aria-hidden='true'>&times;</span>
+      </button>
+    </div>
+  );
+
   render() {
     return (
       <>
@@ -41,6 +58,7 @@ class NewJob extends Component {
             <div className='row h-100'>
               <div className='col-md-10'>
                 <div className='mt-3'>
+                  {this.props.success ? this.successMessage : null}
                   <h2>New Job</h2>
                   <hr />
                   <form
@@ -119,6 +137,7 @@ class NewJob extends Component {
 
 const mapStateToProps = (state) => ({
   user: state.entities.auth.userInfo,
+  success: state.entities.jobs.success,
 });
 
 const mapDispatchToProps = (dispatch) => ({

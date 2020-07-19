@@ -11,6 +11,7 @@ const slice = createSlice({
     list: [],
     loading: false,
     lastFetch: null, // Used for caching
+    success: false,
   },
   reducers: {
     jobRequestFailed: (jobs, action) => {
@@ -23,10 +24,12 @@ const slice = createSlice({
       jobs.list = action.payload;
       jobs.loading = false;
       jobs.lastFetch = Date.now();
+      jobs.success = true;
     },
     // actions => action handlers
     jobAdded: (jobs, action) => {
       jobs.list.push(action.payload);
+      jobs.success = true;
     },
     jobRemoved: (jobs, action) => {
       return jobs.list.filter((job) => job.id !== action.payload.id);

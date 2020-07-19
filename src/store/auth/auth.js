@@ -7,10 +7,14 @@ const slice = createSlice({
     userInfo: {},
     loggedIn: false,
     loading: false,
+    failedLogin: false,
+    responseMessage: '',
   },
   reducers: {
     loginFailed: (user, action) => {
       user.loading = false;
+      user.failedLogin = true;
+      user.responseMessage = action.payload;
     },
     loginRequested: (user, action) => {
       user.loading = true;
