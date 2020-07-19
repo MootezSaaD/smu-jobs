@@ -46,7 +46,7 @@ class App extends Component {
             <Route path='/new'>
               <NewJob />
             </Route>
-            <Route path='/jobs'>
+            <Route exact path='/jobs'>
               <JobsList />
             </Route>
           </Switch>

@@ -42,11 +42,19 @@ function NavBar(props) {
               </li>
             </>
           ) : (
-            <li className='nav-item'>
-              <Link to='/' className='nav-link'>
-                Browse
-              </Link>
-            </li>
+            <>
+              <li className='nav-item'>
+                <Link to='/' className='nav-link'>
+                  My Applications
+                </Link>
+              </li>
+              {' | '}
+              <li className='nav-item'>
+                <Link to='/' className='nav-link'>
+                  Browse
+                </Link>
+              </li>
+            </>
           )}
         </>
       ) : null}

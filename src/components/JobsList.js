@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 // Redux
 import { connect } from 'react-redux';
-import { loadJobs } from '../store/jobs/jobs';
+import { loadJobs, selectJobByID } from '../store/jobs/jobs';
 //
 import JobCard from './JobCard';
 
@@ -46,6 +46,7 @@ class JobsList extends Component {
                   <JobCard
                     key={job._id}
                     course={job.course}
+                    jobid={job._id}
                     author={
                       !!job.author
                         ? `${job.author.firstName} ${job.author.lastName}`
@@ -71,6 +72,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   load: () => dispatch(loadJobs()),
+  selectJob: (jobid) => dispatch(selectJobByID(jobid)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(JobsList);

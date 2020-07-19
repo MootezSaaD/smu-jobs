@@ -40,16 +40,11 @@ const slice = createSlice({
 // Selector Functions (with memoization using reselect)
 // (state, resulting_function())
 
-export const selectJobByAuthorID = createSelector(
-  (state) => state.entities.jobs,
-  (jobs, authorId) => {
-    const result = [];
-    for (const job in jobs) {
-      if (jobs[job].authorId === authorId) result.push(jobs[job]);
-    }
-    return result;
-  }
-);
+export const selectJobByID = (jobid) =>
+  createSelector(
+    (state) => state.entities.jobs,
+    (jobs) => jobs.list.filter((job) => job._id === jobid)[0]
+  );
 
 const {
   jobAdded,
