@@ -19,6 +19,7 @@ import { Provider } from 'react-redux';
 //Styles
 import './index.css';
 import NewJob from './components/NewJob';
+import JobDetails from './components/JobDetails';
 
 // Store
 const store = configureStore();
@@ -48,6 +49,9 @@ class App extends Component {
             </Route>
             <Route exact path='/jobs'>
               <JobsList />
+            </Route>
+            <Route path='/jobs/:id'>
+              <JobDetails />
             </Route>
           </Switch>
         </Router>
